@@ -61,11 +61,6 @@ namespace GaleShapelyMultiPairing
                         isStable = false;
                     }
                 }
-
-                foreach (Seller s in sellers)
-                {
-                    s.EvaluateOrdersSubmitted();
-                }
             }
         }
     }

@@ -41,30 +41,17 @@ namespace GaleShapelyMultiPairing
 
         public void ReceiveOrderRequest(Buyer buyer)
         {
-            this._ordersSubmitted.Add(buyer);
-        }
-
-        // Check each order to see if it is better than our current order, and 
-        // cancel a previous pending order if upgrade is available
-        public void EvaluateOrdersSubmitted()
-        {
             int currentBuyerIndex = this._buyerIndex;
-            foreach (Buyer b in _ordersSubmitted)
-            {
-                EvaluateOrder(b);
-            }
-
+            EvaluateOrder(buyer);
             if (this._buyerIndex != currentBuyerIndex)
             {
                 if (currentBuyerIndex >= 0)
                 {
                     BuyersRanked[currentBuyerIndex].OrderCancelled(this);
                 }
-                
+
                 this.Buyer.OrderAccepted(this);
             }
-
-            this._ordersSubmitted.Clear();
         }
 
         // Check an individual order to see if it is better, upgrade if so
