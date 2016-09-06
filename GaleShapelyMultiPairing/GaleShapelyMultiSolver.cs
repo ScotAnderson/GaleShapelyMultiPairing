@@ -47,9 +47,7 @@ namespace GaleShapelyMultiPairing
                 throw new ArgumentException("Should be exactly enough sellers to satisfy all buyers, but no more or less.");
             }
 
-            // This could be improved by keeping a list of buyers that are currently not satisfied, and only visiting those buyers to submit orders,
-            // and then handling the order evaluation on the spot... May complete that before turning in, or may leave it for a future
-            // performance improvement, depending on time.
+            // This might be improved by keeping a list of buyers that aren't satisfied, and only visiting those buyers?
             bool isStable = false;
             while (!isStable)
             {
