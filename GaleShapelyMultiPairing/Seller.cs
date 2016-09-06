@@ -12,6 +12,7 @@ namespace GaleShapelyMultiPairing
         public string Name { get; private set; }
 
         private List<Buyer> Proposals { get; set; }
+        public Buyer Buyer { get; private set; }
 
         public Seller(string name)
         {
@@ -36,6 +37,39 @@ namespace GaleShapelyMultiPairing
 
         public void EvaluateProposals()
         {
+            Buyer currentBuyer = this.Buyer;
+            foreach (Buyer b in Proposals)
+            {
+                EvaluateProposal(b);
+            }
+
+            if (this.Buyer != currentBuyer)
+            {
+                if (currentBuyer != null)
+                {
+                    currentBuyer.BreakEngagement(this);
+                }
+                
+                this.Buyer.AcceptProposal(this);
+            }
+
+            this.Proposals.Clear();
+        }
+
+        private void EvaluateProposal(Buyer newBuyer)
+        {
+            for (int i = 0; i < BuyerPreferences.Count; i++)
+            {
+                if (BuyerPreferences[i] == newBuyer)
+                {
+                    this.Buyer = newBuyer;
+                    return;
+                }
+                else if (BuyerPreferences[i] == this.Buyer)
+                {
+                    return;
+                }
+            }
         }
 
         public override string ToString()

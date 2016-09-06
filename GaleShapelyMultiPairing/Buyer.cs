@@ -60,6 +60,16 @@ namespace GaleShapelyMultiPairing
             }
         }
 
+        public void AcceptProposal(Seller seller)
+        {
+            SellersConfirmed.Add(seller);
+        }
+
+        public void BreakEngagement(Seller seller)
+        {
+            SellersConfirmed.Remove(seller);
+        }
+
         public override string ToString()
         {
             return this.Name;
