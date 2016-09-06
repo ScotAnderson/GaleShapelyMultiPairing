@@ -8,7 +8,7 @@ namespace GaleShapelyMultiPairingUnitTests
     public class GaleShapelyMultiSolverUnitTests
     {
         [TestMethod]
-        public void SingleBuyerTestCase()
+        public void SolverSingleBuyerTestCase()
         {
             Buyer buyer = new Buyer("Buyer");
             Seller seller0 = new Seller("Seller 0");
@@ -40,7 +40,7 @@ namespace GaleShapelyMultiPairingUnitTests
 
         // This is the classic test with 3 suitors and 3 reviewers described in wikipedia article
         [TestMethod]
-        public void ClassicScenarioTestCase()
+        public void SolverClassicScenarioTestCase()
         {
             Buyer buyerA = new Buyer("Buyer A");
             Buyer buyerB = new Buyer("Buyer B");
@@ -69,7 +69,7 @@ namespace GaleShapelyMultiPairingUnitTests
         }
 
         [TestMethod]
-        public void Complex1TestCase()
+        public void SolverMultipleBuyersTestCase()
         {
             List<Buyer> buyers = CreateBuyers(4);
             List<Seller> sellers = CreateSellers(8);
@@ -116,7 +116,7 @@ namespace GaleShapelyMultiPairingUnitTests
         }
 
         [TestMethod]
-        public void Complex2TestCase()
+        public void SolverFavorSellersPreferencesTestCase()
         {
             List<Buyer> buyers = CreateBuyers(3);
             List<Seller> sellers = CreateSellers(9);
@@ -163,7 +163,7 @@ namespace GaleShapelyMultiPairingUnitTests
         }
 
         [TestMethod]
-        public void Complex3TestCase()
+        public void SolverFavorBuyersPreferencesTestCase()
         {
             List<Buyer> buyers = CreateBuyers(3);
             List<Seller> sellers = CreateSellers(9);

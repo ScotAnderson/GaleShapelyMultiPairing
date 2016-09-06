@@ -10,7 +10,7 @@ namespace GaleShapelyMultiPairingUnitTests
     {
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void SetPreferencesThrowsOnNumSellersOutOfBounds()
+        public void BuyerSetPreferencesThrowsOnNumSellersOutOfBounds()
         {
             Buyer buyer = new Buyer("Buyer");
             buyer.SetPreferences(0, null);
@@ -18,7 +18,7 @@ namespace GaleShapelyMultiPairingUnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void SetPreferencesThrowsOnSellerRankedNull()
+        public void BuyerSetPreferencesThrowsOnSellerRankedNull()
         {
             Buyer buyer = new Buyer("Buyer");
             buyer.SetPreferences(1, null);

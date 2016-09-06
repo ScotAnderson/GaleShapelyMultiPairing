@@ -10,14 +10,14 @@ namespace GaleShapelyMultiPairingUnitTests
     {
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void SetPreferencesThrowsOnBuyerRankedNull()
+        public void SellerSetPreferencesThrowsOnBuyerRankedNull()
         {
             Seller seller = new Seller("Seller");
             seller.SetPreferences(null);
         }
 
         [TestMethod]
-        public void ReceiveOrderRequestTestCase()
+        public void SellerReceiveOrderRequestTestCase()
         {
             Buyer buyer1 = new Buyer("Buyer 1");
             Buyer buyer2 = new Buyer("Buyer 2");
