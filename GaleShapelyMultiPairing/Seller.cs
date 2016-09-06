@@ -26,7 +26,7 @@ namespace GaleShapelyMultiPairing
         {
             this.Name = name;
             this._ordersSubmitted = new List<Buyer>();
-            this._buyerIndex = -1;
+            this._buyerIndex = int.MaxValue;
         }
 
         public void SetPreferences(List<Buyer> buyersRanked)
@@ -41,26 +41,16 @@ namespace GaleShapelyMultiPairing
 
         public void ReceiveOrderRequest(Buyer buyer)
         {
-            int currentBuyerIndex = this._buyerIndex;
-            EvaluateOrder(buyer);
-            if (this._buyerIndex != currentBuyerIndex)
+            int newIndex = BuyersRanked.FindIndex((Buyer b) => (b == buyer));
+            if (this._buyerIndex > newIndex)
             {
-                if (currentBuyerIndex >= 0)
+                if (this._buyerIndex < int.MaxValue)
                 {
-                    BuyersRanked[currentBuyerIndex].OrderCancelled(this);
+                    BuyersRanked[this._buyerIndex].OrderCancelled(this);
                 }
 
-                this.Buyer.OrderAccepted(this);
-            }
-        }
-
-        // Check an individual order to see if it is better, upgrade if so
-        private void EvaluateOrder(Buyer newBuyer)
-        {
-            int newIndex = BuyersRanked.FindIndex((Buyer b) => (b == newBuyer));
-            if (this._buyerIndex == -1 || this._buyerIndex > newIndex)
-            {
                 this._buyerIndex = newIndex;
+                this.Buyer.OrderAccepted(this);
             }
         }
 
