@@ -38,7 +38,7 @@ namespace GaleShapelyMultiPairing
         {
             if (numSellersDesired < 1 || numSellersDesired > 3)
             {
-                throw new ArgumentException("Argument must be in range 1-3 inclusive.", "NumSellersDesired");
+                throw new ArgumentOutOfRangeException("Argument must be in range 1-3 inclusive.", "NumSellersDesired");
             }
 
             if (sellersRanked == null)
