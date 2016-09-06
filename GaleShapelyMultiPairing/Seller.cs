@@ -39,9 +39,10 @@ namespace GaleShapelyMultiPairing
             this.BuyersRanked = buyersRanked;
         }
 
+        // On order received, see if the order (buyer) is better than the current order, and cancel if necessary to upgrade
         public void ReceiveOrderRequest(Buyer buyer)
         {
-            int newIndex = BuyersRanked.FindIndex((Buyer b) => (b == buyer));
+            int newIndex = BuyersRanked.IndexOf(buyer);
             if (this._buyerIndex > newIndex)
             {
                 if (this._buyerIndex < int.MaxValue)
