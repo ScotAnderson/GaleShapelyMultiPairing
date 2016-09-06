@@ -6,69 +6,74 @@ using System.Threading.Tasks;
 
 namespace GaleShapelyMultiPairing
 {
+    /// <summary>
+    /// Basic Seller Class (Evaluator/Acceptor)
+    /// Sellers only want a single buyer.
+    /// </summary>
     public class Seller
     {
-        public List<Buyer> BuyerPreferences { get; private set; }
         public string Name { get; private set; }
+        public List<Buyer> BuyersRanked { get; private set; }
+        public Buyer Buyer
+        {
+            get { return BuyersRanked[this._buyerIndex]; }
+        }
 
-        private List<Buyer> Proposals { get; set; }
-        public Buyer Buyer { get; private set; }
+        private List<Buyer> _ordersSubmitted { get; set; }
+        private int _buyerIndex { get; set; }
 
         public Seller(string name)
         {
             this.Name = name;
-            this.Proposals = new List<Buyer>();
+            this._ordersSubmitted = new List<Buyer>();
+            this._buyerIndex = -1;
         }
 
-        public void SetPreferences(List<Buyer> RankedBuyers)
+        public void SetPreferences(List<Buyer> buyersRanked)
         {
-            if (RankedBuyers == null)
+            if (buyersRanked == null)
             {
                 throw new ArgumentNullException("RankedBuyers");
             }
 
-            this.BuyerPreferences = RankedBuyers;
+            this.BuyersRanked = buyersRanked;
         }
 
-        public void ReceiveProposal(Buyer buyer)
+        public void ReceiveOrderRequest(Buyer buyer)
         {
-            this.Proposals.Add(buyer);
+            this._ordersSubmitted.Add(buyer);
         }
 
-        public void EvaluateProposals()
+        // Check each order to see if it is better than our current order, and 
+        // cancel a previous pending order if upgrade is available
+        public void EvaluateOrdersSubmitted()
         {
-            Buyer currentBuyer = this.Buyer;
-            foreach (Buyer b in Proposals)
+            int currentBuyerIndex = this._buyerIndex;
+            foreach (Buyer b in _ordersSubmitted)
             {
-                EvaluateProposal(b);
+                EvaluateOrder(b);
             }
 
-            if (this.Buyer != currentBuyer)
+            if (this._buyerIndex != currentBuyerIndex)
             {
-                if (currentBuyer != null)
+                if (currentBuyerIndex >= 0)
                 {
-                    currentBuyer.BreakEngagement(this);
+                    BuyersRanked[currentBuyerIndex].OrderCancelled(this);
                 }
                 
-                this.Buyer.AcceptProposal(this);
+                this.Buyer.OrderAccepted(this);
             }
 
-            this.Proposals.Clear();
+            this._ordersSubmitted.Clear();
         }
 
-        private void EvaluateProposal(Buyer newBuyer)
+        // Check an individual order to see if it is better, upgrade if so
+        private void EvaluateOrder(Buyer newBuyer)
         {
-            for (int i = 0; i < BuyerPreferences.Count; i++)
+            int newIndex = BuyersRanked.FindIndex((Buyer b) => (b == newBuyer));
+            if (this._buyerIndex == -1 || this._buyerIndex > newIndex)
             {
-                if (BuyerPreferences[i] == newBuyer)
-                {
-                    this.Buyer = newBuyer;
-                    return;
-                }
-                else if (BuyerPreferences[i] == this.Buyer)
-                {
-                    return;
-                }
+                this._buyerIndex = newIndex;
             }
         }
 

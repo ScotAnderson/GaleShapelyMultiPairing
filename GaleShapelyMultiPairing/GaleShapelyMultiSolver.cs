@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace GaleShapelyMultiPairing
 {
-    //   Buyers want up to be matched with up to three sellers. Some want one, some two, some three. 
-    // There are enough sellers to satisfy all the buyer's desired sellers but no more.
-
+    /// <summary>
+    /// Solver class which loops through the buyers and places orders,
+    /// then loops through the sellers and confirms best available order
+    /// </summary>
     public static class GaleShapelyMultiSolver
     {
         public static void FindSolution(List<Buyer> buyers, List<Seller> sellers)
@@ -23,38 +24,47 @@ namespace GaleShapelyMultiPairing
                 throw new ArgumentNullException("sellers");
             }
 
-            int numSellers = 0;
-            foreach (Buyer b in buyers)
+            foreach (Seller s in sellers)
             {
-                numSellers += b.NumSellersDesired;
+                if (s.BuyersRanked.Count != buyers.Count)
+                {
+                    throw new ArgumentException(string.Format("Seller ({0}) does not have correct number of buyers in its preferences.", s.ToString()));
+                }
             }
 
-            if (numSellers != sellers.Count)
+            int numSellers = sellers.Count;
+            foreach (Buyer b in buyers)
+            {
+                if (b.SellersRanked.Count != sellers.Count)
+                {
+                    throw new ArgumentException(string.Format("Buyer ({0}) does not have correct number of sellers in its preferences.", b.ToString()));
+                }
+                numSellers -= b.NumSellersDesired;
+            }
+
+            if (numSellers != 0)
             {
                 throw new ArgumentException("Should be exactly enough sellers to satisfy all buyers, but no more or less.");
             }
 
+            // This could be improved by keeping a list of buyers that are currently not satisfied, and only visiting those buyers to submit orders,
+            // and then handling the order evaluation on the spot... May complete that before turning in, or may leave it for a future
+            // performance improvement, depending on time.
             bool isStable = false;
             while (!isStable)
             {
+                isStable = true;
                 foreach (Buyer b in buyers)
                 {
-                    b.Propose();
+                    if (b.SubmitOrderRequest() > 0)
+                    {
+                        isStable = false;
+                    }
                 }
 
                 foreach (Seller s in sellers)
                 {
-                    s.EvaluateProposals();
-                }
-
-                isStable = true;
-                foreach (Buyer b in buyers)
-                {
-                    if (!b.Engaged)
-                    {
-                        isStable = false;
-                        break;
-                    }
+                    s.EvaluateOrdersSubmitted();
                 }
             }
         }

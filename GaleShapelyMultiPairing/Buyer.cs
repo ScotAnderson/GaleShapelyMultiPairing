@@ -7,65 +7,81 @@ using System.Threading.Tasks;
 namespace GaleShapelyMultiPairing
 {
 
-    // Buyers want up to be matched with up to three sellers. Some want one, some two, some three.
+    /// <summary>
+    /// Basic Buyer class (Proposer)
+    /// (Choosing Buyer class as the proposer, because in a vacuum of information, I favor the buyer's preferences to the seller's preferences)
+    /// Buyers want to buy from between 1 and 3 sellers.
+    /// </summary>
 
     public class Buyer
     {
-        public int NumSellersDesired { get; private set; }
-        public List<Seller> SellerPreferences { get; private set; }
         public string Name { get; private set; }
+        public int NumSellersDesired { get; private set; }
+        public List<Seller> SellersRanked { get; private set; }
         public List<Seller> SellersConfirmed { get; private set; }
-        public bool Engaged
+
+        public bool IsAllSellersConfirmed
         {
             get { return NumSellersDesired == SellersConfirmed.Count; }
         }
-        private int NextProposal { get; set; }
+
+        private int _nextSellerIndex { get; set; }
 
         public Buyer(string name)
         {
             this.Name = name;
             this.SellersConfirmed = new List<Seller>();
-            this.NextProposal = 0;
+            this._nextSellerIndex = 0;
         }
 
-        public void SetPreferences(int NumSellersDesired, List<Seller> RankedSellers)
+        public void SetPreferences(int numSellersDesired, List<Seller> sellersRanked)
         {
-            if (NumSellersDesired < 1 || NumSellersDesired > 3)
+            if (numSellersDesired < 1 || numSellersDesired > 3)
             {
                 throw new ArgumentException("Argument must be in range 1-3 inclusive.", "NumSellersDesired");
             }
 
-            if (RankedSellers == null)
+            if (sellersRanked == null)
             {
                 throw new ArgumentNullException("RankedSellers");
             }
             
-            this.NumSellersDesired = NumSellersDesired;
-            this.SellerPreferences = RankedSellers;
+            this.NumSellersDesired = numSellersDesired;
+            this.SellersRanked = sellersRanked;
         }
 
-        public void Propose()
+        // Make as many proposals each round as necessary to "fill up" the buyer.
+        public int SubmitOrderRequest()
         {
-            int numProposalsThisRound = NumSellersDesired - SellersConfirmed.Count;
+            int numOrdersThisRouned = NumSellersDesired - SellersConfirmed.Count;
 
-            if (numProposalsThisRound + NextProposal > SellerPreferences.Count)
+            // Validation check. Should never run out of sellers before orders are complete in well formed data.
+            if (numOrdersThisRouned + _nextSellerIndex > SellersRanked.Count)
             {
                 throw new InvalidOperationException("Run out of sellers before proposals are complete.");
             }
 
-            for (int i = 0; i < numProposalsThisRound; i++)
+            for (int i = 0; i < numOrdersThisRouned; i++)
             {
-                SellerPreferences[NextProposal].ReceiveProposal(this);
-                NextProposal++;
+                SellersRanked[_nextSellerIndex].ReceiveOrderRequest(this);
+                _nextSellerIndex++;
             }
+
+            return numOrdersThisRouned;
         }
 
-        public void AcceptProposal(Seller seller)
+        public void OrderAccepted(Seller seller)
         {
+            // Validation check. Proposals should never be sent out that would push us over the edge.
+            if (SellersConfirmed.Count >= NumSellersDesired)
+            {
+                throw new InvalidOperationException("Cannot add another Seller to SellersConfirmed. List is already at desired number of Sellers.");
+            }
+
             SellersConfirmed.Add(seller);
         }
 
-        public void BreakEngagement(Seller seller)
+        public void OrderCancelled(Seller seller)
         {
             SellersConfirmed.Remove(seller);
         }
@@ -74,7 +90,5 @@ namespace GaleShapelyMultiPairing
         {
             return this.Name;
         }
-
-        
     }
 }
