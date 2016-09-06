@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GaleShapelyMultiPairing", "GaleShapelyMultiPairing\GaleShapelyMultiPairing.csproj", "{0F0890AF-426E-4D6A-80CD-ADCAADFD6E53}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GaleShapelyMultiPairingUnitTests", "GaleShapelyMultiPairingUnitTests\GaleShapelyMultiPairingUnitTests.csproj", "{2592F028-7993-4235-9EB8-55BE677D0D99}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0F0890AF-426E-4D6A-80CD-ADCAADFD6E53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F0890AF-426E-4D6A-80CD-ADCAADFD6E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F0890AF-426E-4D6A-80CD-ADCAADFD6E53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2592F028-7993-4235-9EB8-55BE677D0D99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2592F028-7993-4235-9EB8-55BE677D0D99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2592F028-7993-4235-9EB8-55BE677D0D99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2592F028-7993-4235-9EB8-55BE677D0D99}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
