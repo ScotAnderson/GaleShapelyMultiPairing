@@ -33,6 +33,11 @@ namespace GaleShapelyMultiPairing
                 Console.WriteLine(string.Format("Buyer: {0}, Sellers: {1}", b, string.Join(", ", b.SellersConfirmed)));
             }
 
+            foreach (Seller s in sellers)
+            {
+                Console.WriteLine(string.Format("Seller: {0}, Buyer: {1}", s, s.Buyer));
+            }
+
             Console.WriteLine("Press a key to close.");
             Console.ReadKey();
         }
